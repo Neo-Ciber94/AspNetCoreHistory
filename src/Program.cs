@@ -1,6 +1,6 @@
 using AspNetCoreHistory.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -8,9 +8,9 @@ var configuration = builder.Configuration;
 // Add services to the container.
 
 builder.Services.AddControllers()
-    .AddJsonOptions(opts =>
+    .AddNewtonsoftJson(opts =>
     {
-        opts.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
     });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

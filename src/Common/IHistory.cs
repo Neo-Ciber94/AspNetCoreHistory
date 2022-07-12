@@ -42,7 +42,7 @@ public interface IHistory<TSelf, TBase, TKey>
     /// <summary>
     /// The time when this new history version was created.
     /// </summary>
-    public DateTime CreatedAt { get; set; }
+    public DateTime VersionValidFrom { get; set; }
 }
 
 /// <inheritdoc/>

@@ -6,7 +6,7 @@ namespace AspNetCoreHistory.Models;
 public class ProductHistory : IHistory<ProductHistory, Product>
 {
     public long HistoryId { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public DateTime VersionValidFrom { get; set; }
 
     #region Parent Properties
     public int Id { get; set; }

@@ -7,11 +7,11 @@ public static class HistoryPropertyNames
     {
         public int Id => throw new NotImplementedException();
         public long HistoryId { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public DateTime CreatedAt { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public DateTime VersionValidFrom { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 
     class T2 : IHasHistory<T2, T1> { }
 
     public const string HistoryId = nameof(IHistory<T1, T2>.HistoryId);
-    public const string CreatedAt = nameof(IHistory<T1, T2>.CreatedAt);
+    public const string CreatedAt = nameof(IHistory<T1, T2>.VersionValidFrom);
 }

@@ -3,7 +3,8 @@ using AspNetCoreHistory.Models;
 using AspNetCoreHistory.Persistence;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AspNetCoreHistory.Extensions;
+using Microsoft.AspNetCore.JsonPatch;
+using AspNetCoreHistory.Utilities;
 
 namespace AspNetCoreHistory.Controllers;
 
@@ -34,17 +35,6 @@ public class ProductController : ControllerBase
         return Ok(productHistory);
     }
 
-    [HttpGet("history/versions")]
-    public Task<IActionResult> GetAllProductsVersions(CancellationToken cancellationToken = default)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        var versions = db
-            .ProductHistories
-            .GetVersions<ProductHistory, Product>();
-
-        return Task.FromResult(Ok(versions) as IActionResult);
-    }
 
     [HttpGet("history/{id}")]
     public async Task<IActionResult> GetProductHistory(int id, CancellationToken cancellationToken = default)
@@ -94,7 +84,9 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> RestoreHistoryVersion(ProductRestoreVersion restore, CancellationToken cancellationToken = default)
     {
         var versionedEntity = await db.ProductHistories
-            .FindVersions<ProductHistory, Product>(restore.Id)
+            .Where(x => x.Id == restore.Id)
+            .OrderBy(x => x.VersionValidFrom)
+            .Select((Value, i) => new { Value, Version = i + 1 })
             .FirstOrDefaultAsync(x => x.Version == restore.Version, cancellationToken);
 
         if (versionedEntity == null)
